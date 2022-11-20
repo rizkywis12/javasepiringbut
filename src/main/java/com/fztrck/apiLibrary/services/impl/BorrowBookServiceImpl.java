@@ -36,19 +36,19 @@ public class BorrowBookServiceImpl implements BorrowBookService {
 
 
 
-        public ResponseData<Object> createBorrow(long id,BorrowBookDto request) {
+        public ResponseData<Object> borrowBook(long id,BorrowBookDto request) {
             Optional<User> userOptional = userRepository.findById(id);
             if (userOptional.isPresent()) {
                 user = userOptional.get();
                 borrowBook = new BorrowBook();
                 book = bookRepository.findByTitle(request.getBookName());
-                borrowBook.setBook(book);
                 borrowBook.setUser(user);
+                borrowBook.setBook(book);
                 borrowBookRepository.save(borrowBook);
                 responseData = new ResponseData<Object>(HttpStatus.CREATED.value(), "Buku Berhasil Di Pinjam", borrowBook);
 
             }else {
-                responseData = new ResponseData<Object>(HttpStatus.CREATED.value(), "user tidak ada", borrowBook);
+                    responseData = new ResponseData<Object>(HttpStatus.NOT_FOUND.value(), "user tidak ada", borrowBook);
             }
             return responseData;
         }
@@ -68,7 +68,7 @@ public class BorrowBookServiceImpl implements BorrowBookService {
             borrowBookRepository.save(borrowBook);
 
             // response data
-            responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Thanks for borrow", borrowBook);
+            responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Buku Di Kembalikan", borrowBook);
         } else {
             responseData = new ResponseData<Object>(HttpStatus.NOT_FOUND.value(), "data not found", null);
 
