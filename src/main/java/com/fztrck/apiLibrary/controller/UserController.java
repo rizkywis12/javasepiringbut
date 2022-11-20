@@ -2,6 +2,7 @@ package com.fztrck.apiLibrary.controller;
 
 import com.fztrck.apiLibrary.model.dto.BookDto;
 import com.fztrck.apiLibrary.model.dto.ResponseData;
+import com.fztrck.apiLibrary.model.dto.UserDetailDto;
 import com.fztrck.apiLibrary.model.dto.UserDto;
 import com.fztrck.apiLibrary.model.entity.UserDetails;
 import com.fztrck.apiLibrary.services.UserService;
@@ -26,8 +27,13 @@ public class UserController {
         responseData = userService.login(request);
         return ResponseEntity.status(responseData.getStatus()).body(responseData);
     }
+    @PostMapping("/add/{id}")
+    public ResponseEntity<Object> addDetails(@PathVariable long id, @RequestBody UserDetailDto request) {
+        responseData = userService.insertDetails(id, request);
+        return ResponseEntity.status(responseData.getStatus()).body(responseData);
+    }
     @PutMapping("/update/{id}")
-    public ResponseEntity<Object> updateUser(@PathVariable long id, @RequestBody UserDetails request) {
+    public ResponseEntity<Object> updateUser(@PathVariable long id, @RequestBody UserDetailDto request) {
         responseData = userService.updateUser(id, request);
         return ResponseEntity.status(responseData.getStatus()).body(responseData);
     }

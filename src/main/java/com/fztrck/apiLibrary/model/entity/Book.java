@@ -1,12 +1,10 @@
 package com.fztrck.apiLibrary.model.entity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Data;
+
+import javax.persistence.*;
 
 @Table(name = "books")
+@Data
 @Entity
 public class Book {
     @Id
@@ -20,6 +18,10 @@ public class Book {
     private String author;
 
     private boolean isDeleted = false;
+    // many to one ke table category
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     // constructor
     public Book() {
@@ -29,6 +31,7 @@ public class Book {
         this.title = title;
         this.author = author;
     }
+
 
     // setter - getter
     public long getId() {

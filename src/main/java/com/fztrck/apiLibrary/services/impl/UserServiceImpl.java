@@ -1,6 +1,7 @@
 package com.fztrck.apiLibrary.services.impl;
 
 import com.fztrck.apiLibrary.model.dto.ResponseData;
+import com.fztrck.apiLibrary.model.dto.UserDetailDto;
 import com.fztrck.apiLibrary.model.dto.UserDto;
 import com.fztrck.apiLibrary.model.entity.User;
 import com.fztrck.apiLibrary.model.entity.UserDetails;
@@ -48,7 +49,57 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseData<Object> updateUser(long id, UserDetails request) {
+    public ResponseData<Object> updateUser(long id, UserDetailDto request) {
+        Optional<User> updateOpt = userRepository.findById(id);
+        if (updateOpt.isPresent()) {
+            user = updateOpt.get();
+            Optional<UserDetails> detailUserOptional = userDetailsRepository.findByUserId(user);
+            if (detailUserOptional.isPresent()) {
+                userDetails = detailUserOptional.get();
+                userDetails.setFirstName(request.getFirstName());
+                userDetails.setLastName(request.getLastName());
+                userDetails.setPhoneNumber(request.getPhoneNumber());
+                userDetailsRepository.save(userDetails);
+
+                data = new HashMap<>();
+                data.put("email", user.getEmail());
+                data.put("firstName", userDetails.getFirstName());
+                data.put("lastName", userDetails.getLastName());
+                responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Updated Success", data);
+            }
+
+            // Update User
+            // detailUser = new DetailUser(request.getFirstName(), request.getLastName(), request.getPhoneNumber());
+            // detailUser.setUserId(user);
+
+            // response data
+        } else {
+            responseData = new ResponseData<Object>(HttpStatus.NOT_FOUND.value(), "User Not Found", null);
+        }
+        return responseData;
+    }
+    //
+//            userDetails = new UserDetails(request.getFirstName(), request.getLastName(), request.getPhoneNumber());
+    // response data
+    @Override
+    public ResponseData<Object> login(UserDto request) {
+     Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+     if (userOptional.isPresent()){
+         if (request.getPassword().equals(request.getPassword())){
+             data = new HashMap<>();
+             data.put("email", user.getEmail());
+             responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Login Success!!", data);
+         }else {
+             responseData = new ResponseData<Object>(HttpStatus.BAD_REQUEST.value(), "Wrong Password!", null);
+         }
+     }else {
+         responseData = new ResponseData<Object>(HttpStatus.BAD_REQUEST.value(), "User Not Found, Please Register First!",null);
+     }
+     return responseData;
+    }
+
+    @Override
+    public ResponseData<Object> insertDetails(long id, UserDetailDto request) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             user = userOptional.get();
@@ -67,22 +118,5 @@ public class UserServiceImpl implements UserService {
             responseData = new ResponseData<Object>(HttpStatus.NOT_FOUND.value(), "User Id Tidak Ada", null);
         }
         return responseData;
-    }
-
-    @Override
-    public ResponseData<Object> login(UserDto request) {
-     Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
-     if (userOptional.isPresent()){
-         if (request.getPassword().equals(request.getPassword())){
-             data = new HashMap<>();
-             data.put("email", user.getEmail());
-             responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Login Success!!", data);
-         }else {
-             responseData = new ResponseData<Object>(HttpStatus.BAD_REQUEST.value(), "Wrong Password!", null);
-         }
-     }else {
-         responseData = new ResponseData<Object>(HttpStatus.BAD_REQUEST.value(), "User Not Found, Please Register First!",null);
-     }
-     return responseData;
     }
 }

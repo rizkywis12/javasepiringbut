@@ -4,7 +4,9 @@ package com.fztrck.apiLibrary.services.impl;
 import com.fztrck.apiLibrary.model.dto.BookDto;
 import com.fztrck.apiLibrary.model.dto.ResponseData;
 import com.fztrck.apiLibrary.model.entity.Book;
+import com.fztrck.apiLibrary.model.entity.Category;
 import com.fztrck.apiLibrary.repository.BookRepository;
+import com.fztrck.apiLibrary.repository.CategoryRepository;
 import com.fztrck.apiLibrary.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,16 +22,20 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
-
+    @Autowired
+    private CategoryRepository categoryRepository;
     private ResponseData<Object> responseData;
     private Book book;
     private List<Book> books;
+    private Category category;
 
     @Override
     public ResponseData<Object> insertBook(BookDto requesDto) {
         // TODO Auto-generated method stub
         book = new Book(requesDto.getTitle(), requesDto.getAuthor());
-
+        category = categoryRepository.findByName(requesDto.getCategoryName());
+        // set category
+        book.setCategory(category);
         // save to db
         bookRepository.save(book);
 
@@ -72,6 +78,7 @@ public class BookServiceImpl implements BookService {
             // update buku
             book.setTitle(request.getTitle());
             book.setAuthor(request.getAuthor());
+            book.setCategory(category);
 
             // save
             bookRepository.save(book);
