@@ -1,6 +1,7 @@
 package com.fztrck.apiLibrary.services.impl;
 
-import com.fztrck.apiLibrary.model.dto.BorrowBookDto;
+import com.fztrck.apiLibrary.model.dto.BookDto;
+
 import com.fztrck.apiLibrary.model.dto.ResponseData;
 import com.fztrck.apiLibrary.model.entity.Book;
 import com.fztrck.apiLibrary.model.entity.BorrowBook;
@@ -36,16 +37,18 @@ public class BorrowBookServiceImpl implements BorrowBookService {
 
 
 
-        public ResponseData<Object> borrowBook(long id,BorrowBookDto request) {
+        public ResponseData<Object> borrowBook(long id, BookDto request) {
+//            Find UserID
             Optional<User> userOptional = userRepository.findById(id);
+//            Jika User Id ada
             if (userOptional.isPresent()) {
                 user = userOptional.get();
                 borrowBook = new BorrowBook();
-                book = bookRepository.findByTitle(request.getBookName());
+                book = bookRepository.findByTitle(request.getTitle());
                 borrowBook.setUser(user);
                 borrowBook.setBook(book);
                 borrowBookRepository.save(borrowBook);
-                responseData = new ResponseData<Object>(HttpStatus.CREATED.value(), "Buku Berhasil Di Pinjam", borrowBook);
+                responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Buku Berhasil Di Pinjam", borrowBook);
 
             }else {
                     responseData = new ResponseData<Object>(HttpStatus.NOT_FOUND.value(), "user tidak ada", borrowBook);
@@ -56,7 +59,7 @@ public class BorrowBookServiceImpl implements BorrowBookService {
 
 
     @Override
-    public ResponseData<Object> returnedBook(long id, BorrowBookDto request) {
+    public ResponseData<Object> returnedBook(long id, BookDto request) {
         Optional<BorrowBook> borrowOpt = borrowBookRepository.findById(id);
 
         if (borrowOpt.isPresent()) {
