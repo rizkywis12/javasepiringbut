@@ -1,7 +1,7 @@
 package com.fztrck.apiLibrary.controller;
 
-import com.fztrck.apiLibrary.model.dto.BookDto;
-import com.fztrck.apiLibrary.model.dto.ResponseData;
+import com.fztrck.apiLibrary.model.dto.request.BookDto;
+import com.fztrck.apiLibrary.model.dto.response.ResponseData;
 import com.fztrck.apiLibrary.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

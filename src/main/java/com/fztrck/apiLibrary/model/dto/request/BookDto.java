@@ -1,4 +1,4 @@
-package com.fztrck.apiLibrary.model.dto;
+package com.fztrck.apiLibrary.model.dto.request;
 
 
 import lombok.AllArgsConstructor;

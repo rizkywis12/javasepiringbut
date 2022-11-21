@@ -1,7 +1,7 @@
 package com.fztrck.apiLibrary.services.impl;
 
-import com.fztrck.apiLibrary.model.dto.BookDto;
-import com.fztrck.apiLibrary.model.dto.ResponseData;
+import com.fztrck.apiLibrary.model.dto.request.BookDto;
+import com.fztrck.apiLibrary.model.dto.response.ResponseData;
 import com.fztrck.apiLibrary.model.entity.Category;
 import com.fztrck.apiLibrary.repository.CategoryRepository;
 import com.fztrck.apiLibrary.services.CategoryService;
@@ -25,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResponseData<Object> addCategory(BookDto request) {
-        // TODO Auto-generated method stub
+
         category = new Category();
         category.setName(request.getCategoryName());
         categoryRepository.save(category);
@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResponseData<Object> getCategory(Boolean status) {
-        // TODO Auto-generated method stub
+
         // validasi statusnya, user mengirimkan data status?
         if (status == null) {
             categories = categoryRepository.findAll();
@@ -52,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResponseData<Object> updateCategory(long id, BookDto request) {
-        // TODO Auto-generated method stub
+
         // dicari berdasarkan id category untuk diupdate namenya
         Optional<Category> categoryOpt = categoryRepository.findById(id);
         // bisa dikasih validasi kalau buku ada atau tidak
@@ -69,7 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResponseData<Object> deleteCategory(long id) {
-        // TODO Auto-generated method stub
+
         // dicari berdasarkan id category untuk diupdate namenya
         Optional<Category> categoryOpt = categoryRepository.findById(id);
         // bisa dikasih validasi kalau buku ada atau tidak
@@ -86,7 +86,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResponseData<Object> getCategoryById(long id) {
-        // TODO Auto-generated method stub
         // dicari berdasarkan id category untuk diupdate namenya
         Optional<Category> categoryOpt = categoryRepository.findById(id);
         // bisa dikasih validasi kalau buku ada atau tidak

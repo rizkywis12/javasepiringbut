@@ -1,10 +1,8 @@
 package com.fztrck.apiLibrary.controller;
 
-import com.fztrck.apiLibrary.model.dto.BookDto;
-import com.fztrck.apiLibrary.model.dto.ResponseData;
-import com.fztrck.apiLibrary.model.dto.UserDetailDto;
-import com.fztrck.apiLibrary.model.dto.UserDto;
-import com.fztrck.apiLibrary.model.entity.UserDetails;
+import com.fztrck.apiLibrary.model.dto.response.ResponseData;
+import com.fztrck.apiLibrary.model.dto.request.UserDetailDto;
+import com.fztrck.apiLibrary.model.dto.request.UserDto;
 import com.fztrck.apiLibrary.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

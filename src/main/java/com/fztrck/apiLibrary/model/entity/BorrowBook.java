@@ -27,13 +27,11 @@ public class BorrowBook {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    // @CreationTimestamp
     private LocalDateTime BorrowAt = LocalDateTime.now();
 
-    // @UpdateTimestamp
     @Column(name = "returned_date")
     private Date returned_date;
 
-    private boolean borrowed = false;
+    private Boolean borrowed = true;
 }
 

@@ -1,9 +1,8 @@
 package com.fztrck.apiLibrary.services;
 
-import com.fztrck.apiLibrary.model.dto.ResponseData;
-import com.fztrck.apiLibrary.model.dto.UserDetailDto;
-import com.fztrck.apiLibrary.model.dto.UserDto;
-import com.fztrck.apiLibrary.model.entity.UserDetails;
+import com.fztrck.apiLibrary.model.dto.response.ResponseData;
+import com.fztrck.apiLibrary.model.dto.request.UserDetailDto;
+import com.fztrck.apiLibrary.model.dto.request.UserDto;
 
 public interface UserService {
     ResponseData<Object> register(UserDto request);

@@ -1,7 +1,7 @@
 package com.fztrck.apiLibrary.services;
 
-import com.fztrck.apiLibrary.model.dto.BookDto;
-import com.fztrck.apiLibrary.model.dto.ResponseData;
+import com.fztrck.apiLibrary.model.dto.request.BookDto;
+import com.fztrck.apiLibrary.model.dto.response.ResponseData;
 
 public interface CategoryService {
     ResponseData<Object> addCategory(BookDto request);
