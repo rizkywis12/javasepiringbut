@@ -1,8 +1,8 @@
 package com.fztrck.apiLibrary.services.impl;
 
 
-import com.fztrck.apiLibrary.model.dto.BookDto;
-import com.fztrck.apiLibrary.model.dto.ResponseData;
+import com.fztrck.apiLibrary.model.dto.request.BookDto;
+import com.fztrck.apiLibrary.model.dto.response.ResponseData;
 import com.fztrck.apiLibrary.model.entity.Book;
 import com.fztrck.apiLibrary.model.entity.Category;
 import com.fztrck.apiLibrary.repository.BookRepository;

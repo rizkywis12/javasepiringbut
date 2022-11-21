@@ -1,8 +1,8 @@
 package com.fztrck.apiLibrary.services.impl;
 
-import com.fztrck.apiLibrary.model.dto.BookDto;
-
-import com.fztrck.apiLibrary.model.dto.ResponseData;
+import com.fztrck.apiLibrary.exception.custom.CustomNotFoundException;
+import com.fztrck.apiLibrary.model.dto.request.BookDto;
+import com.fztrck.apiLibrary.model.dto.response.ResponseData;
 import com.fztrck.apiLibrary.model.entity.Book;
 import com.fztrck.apiLibrary.model.entity.BorrowBook;
 import com.fztrck.apiLibrary.model.entity.User;
@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,21 +38,34 @@ public class BorrowBookServiceImpl implements BorrowBookService {
 
 
 
-        public ResponseData<Object> borrowBook(long id, BookDto request) {
+        public ResponseData<Object> borrowBook(long id, BookDto request) throws CustomNotFoundException,Exception {
 //            Find UserID
             Optional<User> userOptional = userRepository.findById(id);
+            Optional<Book> bookOpt = bookRepository.findByTitle(request.getTitle());
+            if (userOptional.isEmpty()) {
+                throw new CustomNotFoundException("User Tidak Ditemukan");
+            }
+            if (bookOpt.isEmpty()) {
+                throw new CustomNotFoundException("Buku TIdak Ditemukan");
+            }
 //            Jika User Id ada
-            if (userOptional.isPresent()) {
+            if (userOptional.isPresent() && bookOpt.isPresent()) {
                 user = userOptional.get();
+                book = bookOpt.get();
                 borrowBook = new BorrowBook();
-                book = bookRepository.findByTitle(request.getTitle());
+//                FindByTitle
                 borrowBook.setUser(user);
                 borrowBook.setBook(book);
+//                save
                 borrowBookRepository.save(borrowBook);
-                responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Buku Berhasil Di Pinjam", borrowBook);
+                data = new HashMap<>();
+                data.put("peminjam", user.getEmail());
+                data.put("buku di pinjam", book.getTitle());
+                data.put("Borrow_Date", borrowBook.getBorrowAt());
+                data.put("Returned_Date", borrowBook.getReturned_date());
+                data.put("status", borrowBook.getBorrowed());
 
-            }else {
-                    responseData = new ResponseData<Object>(HttpStatus.NOT_FOUND.value(), "user tidak ada", borrowBook);
+                responseData = new ResponseData<Object>(HttpStatus.OK.value(), "Buku Berhasil Di Pinjam", data);
             }
             return responseData;
         }
@@ -59,13 +73,17 @@ public class BorrowBookServiceImpl implements BorrowBookService {
 
 
     @Override
-    public ResponseData<Object> returnedBook(long id, BookDto request) {
+    public ResponseData<Object> returnedBook(long id, BookDto request) throws CustomNotFoundException {
         Optional<BorrowBook> borrowOpt = borrowBookRepository.findById(id);
+        if (borrowOpt.isEmpty())
+            if (borrowOpt.isEmpty()) {
+                throw new CustomNotFoundException("Tidak ada data peminjaman");
+            }
 
         if (borrowOpt.isPresent()) {
             borrowBook = borrowOpt.get();
             borrowBook.setReturned_date(request.getReturndate());
-            // update namenya
+//         True False Borrowed
             borrowBook.setBorrowed(false);
             // save
             borrowBookRepository.save(borrowBook);
