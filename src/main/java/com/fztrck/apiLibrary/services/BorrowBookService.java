@@ -9,6 +9,6 @@ import com.fztrck.apiLibrary.model.dto.response.ResponseData;
 public interface BorrowBookService {
     ResponseData<Object> borrowBook(long id, BookDto request) throws CustomNotFoundException, Exception;
 
-    ResponseData<Object> returnedBook(long id,BookDto request) throws CustomNotFoundException;
+    ResponseData<Object> returnedBook(long id,BookDto request) throws Exception;
 
 }

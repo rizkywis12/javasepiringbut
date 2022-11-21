@@ -10,6 +10,9 @@ import com.fztrck.apiLibrary.repository.BookRepository;
 import com.fztrck.apiLibrary.repository.BorrowBookRepository;
 import com.fztrck.apiLibrary.repository.UserRepository;
 import com.fztrck.apiLibrary.services.BorrowBookService;
+import com.fztrck.apiLibrary.validator.BookValidator;
+import com.fztrck.apiLibrary.validator.BorrowValidator;
+import com.fztrck.apiLibrary.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,9 @@ public class BorrowBookServiceImpl implements BorrowBookService {
     private User user;
     private BorrowBook borrowBook;
     private Map<Object,Object> data;
+    private UserValidator userValidator;
+    private BookValidator bookValidator;
+    private BorrowValidator borrowValidator;
 
 
 
@@ -42,12 +48,8 @@ public class BorrowBookServiceImpl implements BorrowBookService {
 //            Find UserID
             Optional<User> userOptional = userRepository.findById(id);
             Optional<Book> bookOpt = bookRepository.findByTitle(request.getTitle());
-            if (userOptional.isEmpty()) {
-                throw new CustomNotFoundException("User Tidak Ditemukan");
-            }
-            if (bookOpt.isEmpty()) {
-                throw new CustomNotFoundException("Buku TIdak Ditemukan");
-            }
+            userValidator.validateUserNotFound(userOptional);
+            bookValidator.validateBookNotFound(bookOpt);
 //            Jika User Id ada
             if (userOptional.isPresent() && bookOpt.isPresent()) {
                 user = userOptional.get();
@@ -73,12 +75,9 @@ public class BorrowBookServiceImpl implements BorrowBookService {
 
 
     @Override
-    public ResponseData<Object> returnedBook(long id, BookDto request) throws CustomNotFoundException {
+    public ResponseData<Object> returnedBook(long id, BookDto request) throws Exception {
         Optional<BorrowBook> borrowOpt = borrowBookRepository.findById(id);
-        if (borrowOpt.isEmpty())
-            if (borrowOpt.isEmpty()) {
-                throw new CustomNotFoundException("Tidak ada data peminjaman");
-            }
+     borrowValidator.validateBorrowNotFound(borrowOpt);
 
         if (borrowOpt.isPresent()) {
             borrowBook = borrowOpt.get();
